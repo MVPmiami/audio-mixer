@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.UI;
@@ -13,14 +12,19 @@ public class VolumeSetter : MonoBehaviour
 
     private void OnEnable()
     {
-        _volumeSlider?.onValueChanged.AddListener(delegate { ChangeVolume(); });
+        _volumeSlider?.onValueChanged.AddListener(ChangeVolume);
     }
 
-    public void ChangeVolume()
+    private void OnDisable()
     {
-        if (_volumeSlider.value == 0f)
+        _volumeSlider?.onValueChanged.RemoveListener(ChangeVolume);
+    }
+
+    public void ChangeVolume(float volumeValue)
+    {
+        if (volumeValue == 0f)
             _mixer?.audioMixer.SetFloat(_mixer.name, MutedVolume);
         else
-            _mixer?.audioMixer.SetFloat(_mixer.name, Mathf.Log10(_volumeSlider.value) * VolumeScaleFactor);
+            _mixer?.audioMixer.SetFloat(_mixer.name, Mathf.Log10(volumeValue) * VolumeScaleFactor);
     }
 }

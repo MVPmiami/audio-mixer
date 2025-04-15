@@ -14,7 +14,12 @@ public class ToggleMute : MonoBehaviour
 
     private void OnEnable()
     {
-        _button.onClick.AddListener(delegate { Mute(); });
+        _button.onClick.AddListener(Mute);
+    }
+
+    private void OnDisable()
+    {
+        _button?.onClick.RemoveListener(Mute);
     }
 
     public void Mute()
